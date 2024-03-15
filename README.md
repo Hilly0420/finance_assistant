@@ -1,7 +1,7 @@
 ## 一、摘要
 
 FinAnnounceChat是基于InternLM2-7B-Chat模型进行微调，该模型使用金融财经领域的公告数据进行微调，旨在探索模型在解读公司公告内容方面的应用潜力，为信息检索、风险监控、市场分析等提供价值。
-
+![Alt text](image.png)
 ## 二、使用方法
 
 ### 2.1快速开始
@@ -13,7 +13,7 @@ git clone https://lituotuo:50cd91c574ba3730894f85a55aa90b942358c4d1@code.openxla
 2、本地部署
 ```python
 git clone https://github.com/Hilly0420/finance_assistant.git
-python start.py
+python start.py #修改web_demo.py中模型的路径
 ```
 ### 2.2 模型微调
 #### XTuner安装

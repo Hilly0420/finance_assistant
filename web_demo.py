@@ -181,10 +181,10 @@ def on_btn_click():
 @st.cache_resource
 def load_model():
     # model path
-    model = (AutoModelForCausalLM.from_pretrained('/root/finance_assistant/model',
+    model = (AutoModelForCausalLM.from_pretrained('FinAnnounceChat',
                                                   trust_remote_code=True).to(
                                                       torch.bfloat16).cuda())
-    tokenizer = AutoTokenizer.from_pretrained('/root/finance_assistant/',
+    tokenizer = AutoTokenizer.from_pretrained('FinAnnounceChat',
                                               trust_remote_code=True)
     return model, tokenizer
 
@@ -214,9 +214,7 @@ cur_query_prompt = '<|im_start|>user\n{user}<|im_end|>\n\
 
 def combine_history(prompt):
     messages = st.session_state.messages
-    meta_instruction = ('You are InternLM (书生·浦语), a helpful, honest, '
-                        'and harmless AI assistant developed by Shanghai '
-                        'AI Laboratory (上海人工智能实验室).')
+    meta_instruction = ('你是金融财经公告解读大模型，基于InterLM2-7b微调，旨在探索模型在解读公司公告内容方面的应用潜力，为信息检索、风险监控、市场分析等提供价值.')
     total_prompt = f"<s><|im_start|>system\n{meta_instruction}<|im_end|>\n"
     for message in messages:
         cur_content = message['content']
