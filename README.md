@@ -1,6 +1,6 @@
 ## 一、摘要
 
-本报告详细介绍了如何基于xtuner对InternLM2-7B-Chat模型进行微调，针对金融财经领域的公告文本进行理解和关键信息提取。通过展示模型的微调流程、参数选择、以及在公开测试集上的性能表现，本研究旨在探索模型在解读公司公告内容方面的应用潜力，为信息检索、风险监控、市场分析等提供价值。
+FinAnnounceChat是基于InternLM2-7B-Chat模型进行微调，该模型使用金融财经领域的公告数据进行微调，旨在探索模型在解读公司公告内容方面的应用潜力，为信息检索、风险监控、市场分析等提供价值。
 
 ## 二、使用方法
 
@@ -12,7 +12,8 @@ git clone https://lituotuo:50cd91c574ba3730894f85a55aa90b942358c4d1@code.openxla
 ```
 2、本地部署
 ```python
-git clone https://lituotuo:50cd91c574ba3730894f85a55aa90b942358c4d1@code.openxlab.org.cn/lituotuo/FinAnnounceChat.git
+git clone https://github.com/Hilly0420/finance_assistant.git
+python start.py
 ```
 ### 2.2 模型微调
 #### XTuner安装
@@ -35,7 +36,39 @@ xtuner list-cfg -p internlm2
 xtuner copy-cfg ${CONFIG_NAME} ${SAVE_PATH}
 vi ${SAVE_PATH}/${CONFIG_NAME}_copy.py
 ```
-2）开始微调
+2）数据集
+微调准备的数据集格式如下：
+``` python
+[{
+    "conversation":[
+        {
+            "system": "xxx",
+            "input": "xxx",
+            "output": "xxx"
+        },
+        {
+            "input": "xxx",
+            "output": "xxx"
+        },
+        xxx
+    ]
+},
+{
+    "conversation":[
+        {
+            "system": "xxx",
+            "input": "xxx",
+            "output": "xxx"
+        },
+        {
+            "input": "xxx",
+            "output": "xxx"
+        },
+        xxx
+    ]
+}]
+``` 
+3）开始微调
 ``` python
 xtuner train ${CONFIG_NAME_OR_PATH}
 ```
@@ -50,7 +83,7 @@ xtuner train internlm2_chat_7b_qlora_oasst1_e3 --deepspeed deepspeed_zero2
 3）转为HF模型
 ``` python
 xtuner convert pth_to_hf ./internlm2_chat_7b_qlora_oasst1_e3_copy.py \
-                         ./work_dirs/internlm2_chat_7b_qlora_oasst1_e3_copy/epoch_3.pth \
+                         ./work_dirs/internlm2_chat_7b_qlora_oasst1_e3_copy/iter1800.pth \
                          ./hf
 ```
 4）HF模型合并
@@ -59,7 +92,7 @@ export MKL_SERVICE_FORCE_INTEL=1
 export MKL_THREADING_LAYER='GNU'
 
 # 原始模型参数存放的位置
-export NAME_OR_PATH_TO_LLM=/root/math/model/internlm2-fin-7b
+export NAME_OR_PATH_TO_LLM=/root/model/FinAnnounceChat
 
 # Hugging Face格式参数存放的位置
 export NAME_OR_PATH_TO_ADAPTER=/root/math/config/hf
